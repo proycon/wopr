@@ -1,5 +1,5 @@
 AM_CPPFLAGS = -I@top_srcdir@/include
-AM_CXXFLAGS = -std=c++11 -O3 -Wall
+AM_CXXFLAGS = -std=c++17 -O3 -Wall
 
 bin_PROGRAMS = wopr
 
