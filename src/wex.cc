@@ -746,7 +746,7 @@ int multi_dist2( Logfile& l, Config& c ) {
 	int    subtype = classifier->get_subtype();
 
 	//l.log( foo.answer + " : " + foo.cl );
-	if ( classifier->get_type() == 1 ) {
+	if ( type == 1 ) {
 	  outline   = outline + foo.answer + " " + to_str(foo.prob)+ " ";
 	  outline   = outline + to_str(foo.md) + " " + to_str(foo.mal) + " ";
 	}
@@ -982,8 +982,6 @@ int multi_gated( Logfile& l, Config& c ) {
   std::string a_line;
   std::vector<std::string> words;
   std::map<std::string, Classifier*>::iterator gci;
-  std::string gate;
-  std::string target;
   int gates_triggered = 0;
 
   md2    multidist;
@@ -1004,8 +1002,8 @@ int multi_gated( Logfile& l, Config& c ) {
 
     int pos = words.size()-1-fco;
     pos     = (pos < 0) ? 0 : pos;
-    gate    = words[pos];
-    target  = words[words.size()-1];
+    std::string gate    = words[pos];
+    std::string target  = words[words.size()-1];
 
     //l.log( a_line + " / " + gate );
 

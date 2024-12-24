@@ -96,8 +96,9 @@ int gen_test( Logfile& l, Config& cf ) {
 
   // No slash at end of dirname.
   //
-  if ( (dirname != "") && (dirname.substr(dirname.length()-1, 1) == "/") ) {
-    dirname = dirname.substr(0, dirname.length()-1);
+  if ( (dirname != "")
+       && (dirname.back() == '/') ) {
+    dirname.pop_back();
   }
 
   // Trying the dir mode. So we create Timbl experiment first, then

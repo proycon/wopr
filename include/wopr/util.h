@@ -88,7 +88,7 @@ void Tokenize(const std::string& buffer, std::vector<std::string>& tokens,
 std::string status_to_str(int);
 std::string trim(std::string const &source, char const* delims = " \t\r\n");
 
-bool is_numeric( std::string );
+bool is_numeric( const std::string& );
 
 long clock_u_secs();
 long clock_m_secs();

@@ -36,10 +36,10 @@
 
 int ngram_list( Logfile&, Config& );
 int ngram_test( Logfile&, Config& );
-void last_word( std::string&, std::string& );
-void but_last_word( std::string&, std::string& );
-void split( std::string&, std::string&, std::string& );
-void split_tab( std::string&, std::string&, std::string&, std::string& );
+void last_word( const std::string&, std::string& );
+void but_last_word( const std::string&, std::string& );
+void split( const std::string&, std::string&, std::string& );
+void split_tab( const std::string&, std::string&, std::string&, std::string& );
 int ngram_one_line( const std::string&,
 		    int, std::map<std::string,double>&,
 		    std::vector<ngram_elem>&,

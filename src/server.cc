@@ -869,7 +869,6 @@ int server4( Logfile& l, Config& c) {
   file_lexicon.close();
   l.log( "Read lexicon, "+to_str(hpx_entries)+"/"+to_str(lex_entries)+" (total_count="+to_str(total_count)+")." );
 
-  std::string result;
   const Timbl::ClassDistribution *vd;
   const Timbl::TargetValue *tv;
 
@@ -963,7 +962,7 @@ int server4( Logfile& l, Config& c) {
 	    }
 	    size_t bl =  tmp_buf.length();
 	    if ( tmp_buf.substr(bl-5, 5) == " </s>" ) {
-	      tmp_buf = tmp_buf.substr(0, bl-5);
+	      tmp_buf.resize(bl-5);
 	    }
 	    if ( verbose > 1 ) {
 	      l.log( "|" + tmp_buf + "| skm" );
@@ -1041,7 +1040,7 @@ int server4( Logfile& l, Config& c) {
 			break;
 	      }
 
-	      result = tv->name_string();
+	      std::string result = tv->name_string();
 	      size_t res_freq = tv->ValFreq();
 
 	      if ( verbose > 1 ) {
@@ -1339,7 +1338,7 @@ int xmlserver(Logfile& l, Config& c) {
 	    }
 	    size_t bl =  tmp_buf.length();
 	    if ( tmp_buf.substr(bl-5, 5) == " </s>" ) {
-	      tmp_buf = tmp_buf.substr(0, bl-5);
+	      tmp_buf.resize(bl-5);
 	    }
 	    if ( verbose > 1 ) {
 	      l.log( "|" + tmp_buf + "| skm" );
@@ -1626,10 +1625,6 @@ int mbmt(Logfile& l, Config& c) {
   file_lexicon.close();
   l.log( "Read lexicon, "+to_str(hpx_entries)+"/"+to_str(lex_entries)+" (total_count="+to_str(total_count)+")." );
 
-  std::string result;
-  const Timbl::ClassDistribution *vd;
-  const Timbl::TargetValue *tv;
-
   signal(SIGCHLD, SIG_IGN);
 
   try {
@@ -1769,13 +1764,15 @@ int mbmt(Logfile& l, Config& c) {
 	      std::string target = words.at( words.size()-1 );
 
 	      double distance;
-	      tv = My_Experiment->Classify( classify_line, vd, distance );
+	      const Timbl::ClassDistribution *vd;
+	      const Timbl::TargetValue *tv
+		= My_Experiment->Classify( classify_line, vd, distance );
 	      if ( ! tv ) {
 			l.log( "ERROR: Timbl returned a classification error, aborting." );
 			break;
 	      }
 
-	      result = tv->name_string();
+	      std::string result = tv->name_string();
 	      size_t res_freq = tv->ValFreq();
 
 	      double res_p = -1;
@@ -1895,9 +1892,8 @@ int hapax_vector( std::vector<std::string>& words, const std::map<std::string,in
   std::string hpx_sym = "<unk>"; //c.get_value("hpx_sym", "<unk>");
   int changes = 0;
 
-  std::string wrd;
   for ( size_t i = 0; i < words.size()-1; i++ ) {
-    wrd = words.at( i );
+    std::string wrd = words.at( i );
     if ( wrd == "_" ) { // skip
        continue;
     }
@@ -1961,10 +1957,6 @@ int webdemo(Logfile& l, Config& c) {
     l.log( "Read filter list" );
     do_filter = true;
   }
-
-  std::string result;
-  const Timbl::ClassDistribution *vd;
-  const Timbl::TargetValue *tv;
 
   try {
     Sockets::ServerSocket server_sock;
@@ -2060,14 +2052,16 @@ int webdemo(Logfile& l, Config& c) {
 	//
 	if ( skip == false ) {
 	  double distance;
-	  tv = My_Experiment->Classify( classify_line, vd, distance );
+	  const Timbl::ClassDistribution *vd;
+	  const Timbl::TargetValue *tv
+	    = My_Experiment->Classify( classify_line, vd, distance );
 	  size_t md  = My_Experiment->matchDepth();
 	  //bool   mal = My_Experiment->matchedAtLeaf();
 
 	  xml = xml + "<timbl md=\""+to_str(md)+"\" mal=\""+to_str(md)+"\" />";
 
 	  if ( tv ) {
-	    result = tv->name_string();
+	    std::string result = tv->name_string();
 	    size_t res_freq = tv->ValFreq(); //??
 
 	    if ( verbose > 1 ) {
@@ -2164,10 +2158,6 @@ int one( Logfile& l, Config& c) {
   l.log( "timbl:     "+timbl_val ); // timbl settings
   l.dec_prefix();
 
-  std::string result;
-  const Timbl::ClassDistribution *vd;
-  const Timbl::TargetValue *tv;
-
   try {
     Sockets::ServerSocket server_sock;
 
@@ -2226,9 +2216,11 @@ int one( Logfile& l, Config& c) {
       std::string xml;
 
       double distance;
-      tv = My_Experiment->Classify( classify_line, vd, distance );
+      const Timbl::ClassDistribution *vd;
+      const Timbl::TargetValue *tv =
+	My_Experiment->Classify( classify_line, vd, distance );
       if ( tv ) {
-	result = tv->name_string();
+	std::string result = tv->name_string();
 	size_t res_freq = tv->ValFreq(); //??
 
 	if ( verbose > 1 ) {
@@ -2441,8 +2433,6 @@ int server_mg( Logfile& l, Config& c ) {
 
 
   std::map<std::string, Classifier*>::iterator gci;
-  std::string gate;
-  std::string target;
 
   md2    multidist;
   Classifier* cl = NULL; // classifier used.
@@ -2450,6 +2440,8 @@ int server_mg( Logfile& l, Config& c ) {
   signal(SIGCHLD, SIG_IGN);
 
   try {
+    std::string gate;
+    std::string target;
 
     Sockets::ServerSocket server_sock;
     if ( ! server_sock.connect( port )) {
@@ -2519,7 +2511,7 @@ int server_mg( Logfile& l, Config& c ) {
 	    }
 	    size_t bl =  tmp_buf.length();
 	    if ( tmp_buf.substr(bl-5, 5) == " </s>" ) {
-	      tmp_buf = tmp_buf.substr(0, bl-5);
+	      tmp_buf.resize(bl-5);
 	    }
 	    if ( verbose > 1 ) {
 	      l.log( "|" + tmp_buf + "| skm" );

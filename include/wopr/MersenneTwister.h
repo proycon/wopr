@@ -111,7 +111,7 @@ public:
 
 	// Re-seeding functions with same behavior as initializers
 	void seed( const uint32 oneSeed );
-	void seed( uint32 *const bigSeed, const uint32 seedLength = N );
+	void seed( uint32 *const& bigSeed, const uint32 seedLength = N );
 	void seed();
 
 	// Saving and loading generator state
@@ -220,7 +220,7 @@ inline void MTRand::seed( const uint32 oneSeed )
 }
 
 
-inline void MTRand::seed( uint32 *const bigSeed, const uint32 seedLength )
+inline void MTRand::seed( uint32 *const& bigSeed, const uint32 seedLength )
 {
 	// Seed the generator with an array of uint32's
 	// There are 2^19937-1 possible initial states.  This function allows
@@ -356,21 +356,21 @@ inline void MTRand::save( uint32* saveArray ) const
 
 inline void MTRand::load( uint32 *const loadArray )
 {
-	 uint32 *s = state;
-	 uint32 *la = loadArray;
-	 int i = N;
-	for( ; i--; *s++ = *la++ ) {}
-	left = *la;
-	pNext = &state[N-left];
+  uint32 *s = state;
+  uint32 const * la = loadArray;
+  int i = N;
+  for( ; i--; *s++ = *la++ ) {}
+  left = *la;
+  pNext = &state[N-left];
 }
 
 
 inline std::ostream& operator<<( std::ostream& os, const MTRand& mtrand )
 {
-	 const MTRand::uint32 *s = mtrand.state;
-	 int i = mtrand.N;
-	for( ; i--; os << *s++ << "\t" ) {}
-	return os << mtrand.left;
+  const MTRand::uint32 *s = mtrand.state;
+  int i = mtrand.N;
+  for( ; i--; os << *s++ << "\t" ) {}
+  return os << mtrand.left;
 }
 
 

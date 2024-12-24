@@ -1,6 +1,3 @@
-// $Id$
-//
-
 /*****************************************************************************
  * Copyright 2005-2014 Peter Berck                                           *
  *                                                                           *
@@ -57,9 +54,10 @@
 // Code
 // ----------------------------------------------------------------------------
 
-Config::Config() {
-  t_start = now();
-  status = 1;
+Config::Config():
+  t_start( now() ),
+  status(1)
+{
   //add_kv( "factor", "10" ); // default settings.
 }
 
@@ -128,7 +126,7 @@ std::string Config::kvs_str() {
     }
     res = res + mi.first + ":" + val + ",";
   }
-  res = res.substr(0, res.length()-1);
+  res.pop_back();
   return res;
 }
 
@@ -147,7 +145,7 @@ std::string Config::kvs_str_clean() {
       res = res + mi.first + ":" + val + ",";
     }
   }
-  res = res.substr(0, res.length()-1);
+  res.pop_back();
   return res;
 }
 

@@ -205,9 +205,6 @@ int focus( Logfile& l, Config& c ) {
       return -1;
     }
 
-    std::string target;
-    std::map<std::string, int>::iterator ri;
-
     while( std::getline( file_in, a_line ) ) {
 
       words.clear();
@@ -215,11 +212,10 @@ int focus( Logfile& l, Config& c ) {
 
       int pos = words.size()-1-fco;
       pos = (pos < 0) ? 0 : pos;
-      target = words[pos]; // target is the focus "target"
-
+      std::string target = words[pos]; // target is the focus "target"
       bool is_gated = false;
 
-      ri = focus_words.find( target ); // Is it in the focus list?
+      auto ri = focus_words.find( target ); // Is it in the focus list?
       if ( ri != focus_words.end() ) { // yes
 	//l.log( "FOUND: "+target+" in "+a_line );
 	is_gated = true;

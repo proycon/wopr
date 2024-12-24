@@ -113,7 +113,7 @@ class History {
   //!
   ~History() {};
 
-  void add(Context *c) {
+  void add( const Context *c) {
     // check size? resize if too big?
     if ( his.size() < max ) {
       his.push_back( new Context(c) );
@@ -324,7 +324,7 @@ class PDT {
       // fix word context? this needs to fix "wip" as well,
       // otherwise we miss letters in the beginning
       add_log( "fix" );
-      Context *pw = wrd_his->get(); //removes also
+      const Context *pw = wrd_his->get(); //removes also
       if ( pw != NULL ) {
 	wrd_ctx->cp( pw );
       }
@@ -332,11 +332,11 @@ class PDT {
       // take from wip.
       //
       if ( wip.length() > 0 ) {
-	wip = wip.substr(0, wip.length()-1);
+	wip.pop_back();
       }
       --lpos;
     }
-    Context *pc = ltr_his->get(); //removes also
+    const Context *pc = ltr_his->get(); //removes also
     if ( pc != NULL ) {
       ltr_ctx->cp( pc );
     }

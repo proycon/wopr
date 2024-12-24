@@ -324,7 +324,7 @@ int OFF_ngram_list( Logfile& l, Config& c ) {
 
 // Return last word in "string with spaces".
 //
-void last_word( std::string& str, std::string& res ) {
+void last_word( const std::string& str, std::string& res ) {
     size_t pos = str.rfind( ' ' );
     if ( pos != std::string::npos ) {
       res = str.substr(pos+1);
@@ -333,7 +333,7 @@ void last_word( std::string& str, std::string& res ) {
     }
 }
 
-void but_last_word( std::string& str, std::string& res ) {
+void but_last_word( const std::string& str, std::string& res ) {
     size_t pos = str.rfind( ' ' );
     if ( pos != std::string::npos ) {
       res = str.substr(0, pos);
@@ -344,7 +344,7 @@ void but_last_word( std::string& str, std::string& res ) {
 
 // Split "a b c" into "a b" and "c"
 //
-void split( std::string& str, std::string& nmin1gram, std::string& lw ) {
+void split( const std::string& str, std::string& nmin1gram, std::string& lw ) {
     size_t pos = str.rfind( ' ' );
     if ( pos != std::string::npos ) {
       nmin1gram = str.substr(0, pos);
@@ -361,7 +361,7 @@ void split( std::string& str, std::string& nmin1gram, std::string& lw ) {
 // empty strings. Only the outer tabs will be used in
 // the case of more tabs.
 //
-void split_tab( std::string& str,
+void split_tab( const std::string& str,
 		std::string& l,
 		std::string& ngram,
 		std::string& r ) {

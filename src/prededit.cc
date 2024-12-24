@@ -135,7 +135,7 @@ int pdt( Logfile& l, Config& c ) {
   size_t length = pel; // length of each predicted string
   std::vector<int> depths(length+1, 1);
   if ( ped.size() > length ) {
-    ped = ped.substr(0, length );
+    ped.resize( length );
   }
   for( size_t i = 0; i < ped.size(); i++) {
     depths.at(length-i) = my_stoi( ped.substr(i, 1), 32 ); // V=31
@@ -424,7 +424,7 @@ int pdt2( Logfile& l, Config& c ) {
   size_t length = pel; // length of each predicted string
   std::vector<int> depths(length+1, 1);
   if ( ped.size() > length ) {
-    ped = ped.substr(0, length );
+    ped.resize( length );
   }
   for( size_t i = 0; i < ped.size(); i++) {
     depths.at(length-i) = my_stoi( ped.substr(i, 1), 32 ); // V=31
@@ -1096,13 +1096,12 @@ int window_letters( Logfile& l, Config& c ) {
     return -1;
   }
 
-  std::string                        a_word;
-  std::string                        a_line;
   std::vector<std::string>           results;
   Context ctx(lc);
 
   if ( mode == 0 ) {
     bool first = true; //false to get first line with empty context
+    std::string a_word;
     while ( file_in >> a_word ) {
 
       if ( ! first ) {
@@ -1122,7 +1121,7 @@ int window_letters( Logfile& l, Config& c ) {
       results.clear();
     }
   } else if ( mode == 1 ) {
-
+    std::string a_line;
     while( std::getline( file_in, a_line ) ) {
       if ( a_line == "" ) {
 	continue;

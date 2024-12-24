@@ -199,6 +199,10 @@ int range_from_lex( Logfile& l, Config& c ) {
   end of discourse? reset after nnn words? track changes?
 */
 struct gc_elem {
+  gc_elem():
+    strength(0),
+    hv(0)
+  {};
   std::string word;
   int         strength;
   int64_t hv;

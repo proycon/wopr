@@ -1139,8 +1139,6 @@ int window_line(Logfile& l, Config& c) {
   int ws = my_stoi( c.get_value( "ws", "7" ));
   std::string              a_word;
   std::vector<std::string> words; // input.
-  std::vector<std::string> res;
-  std::vector<std::string> word_stats; // perplx. per word.
   std::vector<std::string> window_v(ws+1, "_"); //context + target
   std::vector<std::string>::iterator wi;
   std::ostream_iterator<std::string> output( std::cout, " " );
@@ -1155,6 +1153,7 @@ int window_line(Logfile& l, Config& c) {
     std::string distrib;
     std::vector<std::string> distribution;
     std::string result;
+    std::vector<std::string> word_stats; // perplx. per word.
     double total_prplx = 0.0;
     int corr = 0;
     int possible = 0;
@@ -1165,6 +1164,7 @@ int window_line(Logfile& l, Config& c) {
     for ( wi = words.begin()+0; wi != words.end(); ++wi )  {
       ++sentence_length;
       a_word = *wi;
+      std::vector<std::string> res;
       std::copy( window_v.begin(), window_v.end()-1, std::inserter(res, res.end()));
       res.push_back(a_word); // target
       for ( int i = 0; i < ws; i++ ) {
@@ -1213,7 +1213,7 @@ int window_line(Logfile& l, Config& c) {
 	  }
 	  //l.log_begin( token );
 	} else {
-	  token = token.substr(0, token.length()-1);
+	  token.pop_back();
 	  sum += my_stoi( token );
 	  //l.log_end( " - "+token );
 	}
@@ -1619,11 +1619,11 @@ int window_lr( Logfile& l, Config& c ) {
   }
 
   std::string                        a_line;
-  std::string                        t_line;
   std::vector<std::string>           results;
 
   if ( to == 0 ) {
     while( std::getline( file_in, a_line ) ) {
+      std::string t_line;
       if ( a_line == "" ) {
 	if ( it > 0 ) { // we assume target file has identical layout/empty lines
 	  std::getline( tfile_in, t_line ); // also forward one line
@@ -1764,9 +1764,7 @@ int unk_pred( Logfile& l, Config& c ) {
 
   // Set up Timbl.
   //
-  std::string a_line;
   std::vector<std::string> words;
-  std::string result;
   int unknown_count = 0;
   int skipped_num = 0;
   int skipped_ent = 0;
@@ -1780,6 +1778,7 @@ int unk_pred( Logfile& l, Config& c ) {
     // Loop over the test file.
     // The test file is in format l-1,l-2,l-3,...
     //
+    std::string a_line;
     while( std::getline( file_in, a_line ) ) {
 
       a_line = trim( a_line, " \n\r" );
@@ -1819,6 +1818,7 @@ int unk_pred( Logfile& l, Config& c ) {
 	  // Create a pattern for this word. The pattern we want is
 	  // at index i.
 	  //
+	  std::string result;
 	  window( a_line, "", 2, 2, false, results ); // hardcoded (now) l2r2 format
 	  std::string cl = results.at(i);      // line to classify
 	  cl = cl + "TARGET";
@@ -2671,7 +2671,7 @@ int test(Logfile& l, Config& c) {
 // over map/array with words+freq.
 //   std::map<std::string,int> wfreqs;
 //   wfreqs[a_word] = wfreq;
-double word_entropy( std::map<std::string,int>& wfreqs ) {
+double word_entropy( const std::map<std::string,int>& wfreqs ) {
   double word_e = 0.0;
   unsigned long t_freq = 0;
 
@@ -3268,8 +3268,9 @@ int pplx_simple( Logfile& l, Config& cf ) {
 
   // No slash at end of dirname.
   //
-  if ( (dirname != "") && (dirname.substr(dirname.length()-1, 1) == "/") ) {
-    dirname = dirname.substr(0, dirname.length()-1);
+  if ( (dirname != "")
+       && (dirname.back() == '/') ) {
+    dirname.pop_back();
   }
 
   // This is better for l0r3 contexts &c.
@@ -4234,12 +4235,11 @@ int test_wopr( Logfile& l, Config& c ) {
   int n = my_stoi(c.get_value( "n", "0" ));
 
   //std::string                        a_word = "wöåd and エイ ひ.";
-  std::vector<std::string>           results;
 
   if ( cmd == "utf8" ) {
     int lc = 4;
     Context ctx(lc);
-
+    std::vector<std::string>           results;
     for ( long i = 0; i < 1000; i++ ) {
       results.clear();
       window_words_letters(a_word, lc, ctx, results);

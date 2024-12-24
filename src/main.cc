@@ -317,7 +317,7 @@ int main( int argc, char* argv[] ) {
   Tokenize( fun_list, funs, ',' );
   for ( size_t i = 0; i < funs.size(); i++ ) {
     l.log( "Running: "+funs.at(i) );
-    int(*pt2Func2)(Logfile&, Config&) = get_function( funs.at(i) );
+    const auto pt2Func2 = get_function( funs.at(i) );
     int res = pt2Func2(l, co);
     l.log( "Result = "+to_str(res) );
   }

@@ -232,45 +232,41 @@ time_t utc() {
 */
 std::string the_date_time() {
   char               timestring[32];
-  timeval            tv;
-  struct tm          *t;
 
   std::string time_format = std::string("%Y/%m/%d %H:%M:%S");
+  timeval         tv;
   gettimeofday(&tv, 0);
-  t = localtime(&tv.tv_sec);
+  const struct tm *t = localtime(&tv.tv_sec);
   strftime(timestring, 32, time_format.c_str(),  t);
   return( std::string( timestring ) );
 }
 std::string the_date_time_stamp() {
   char               timestring[32];
-  timeval            tv;
-  struct tm          *t;
 
   std::string time_format = std::string("%Y%m%d.%H%M%S");
+  timeval         tv;
   gettimeofday(&tv, 0);
-  t = localtime(&tv.tv_sec);
+  const struct tm *t = localtime(&tv.tv_sec);
   strftime(timestring, 32, time_format.c_str(),  t);
   return( std::string( timestring ) );
 }
 std::string the_time() {
   char               timestring[32];
-  timeval            tv;
-  struct tm          *t;
 
   std::string time_format = std::string("%H:%M:%S");
+  timeval            tv;
   gettimeofday(&tv, 0);
-  t = localtime(&tv.tv_sec);
+  const struct tm    *t = localtime(&tv.tv_sec);
   strftime(timestring, 32, time_format.c_str(),  t);
   return( std::string( timestring ) );
 }
 std::string the_date() {
   char               timestring[32];
-  timeval            tv;
-  struct tm          *t;
 
   std::string time_format = std::string("%Y/%m/%d");
+  timeval            tv;
   gettimeofday(&tv, 0);
-  t = localtime(&tv.tv_sec);
+  const struct tm    *t = localtime(&tv.tv_sec);
   strftime(timestring, 32, time_format.c_str(),  t);
   return( std::string( timestring ) );
 }
@@ -280,10 +276,9 @@ std::string the_date() {
 */
 std::string the_date_time(long s) {
   char               timestring[32];
-  struct tm          *t;
 
   std::string time_format = std::string("%Y/%m/%d %H:%M:%S");
-  t = localtime(&s);
+  const struct tm    *t   = localtime(&s);
   strftime(timestring, 32, time_format.c_str(),  t);
   return( std::string( timestring ) );
 }
@@ -293,10 +288,9 @@ std::string the_date_time(long s) {
 */
 std::string the_date_time_utc(long s) {
   char               timestring[32];
-  struct tm          *t;
 
   std::string time_format = std::string("%Y/%m/%d %H:%M");
-  t = gmtime(&s);
+  const struct tm      *t = gmtime(&s);
   strftime(timestring, 32, time_format.c_str(),  t);
   return( std::string( timestring ) );
 }
@@ -589,7 +583,7 @@ std::string trim(std::string const& source, char const* delims ) {
   return result;
 }
 
-bool is_numeric( std::string s ) {
+bool is_numeric( const std::string& s ) {
   for ( size_t i = 0; i < s.length(); i++ ) {
     char c = s.at(i);
     if ( isdigit(c) || (c == '.') || (c == ',') || (c == '+') ||

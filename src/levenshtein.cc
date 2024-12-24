@@ -584,8 +584,9 @@ int correct( Logfile& l, Config& c ) {
 
   // No slash at end of dirname.
   //
-  if ( (dirname != "") && (dirname.substr(dirname.length()-1, 1) == "/") ) {
-    dirname = dirname.substr(0, dirname.length()-1);
+  if ( (dirname != "")
+       && (dirname.back() == '/') ) {
+    dirname.pop_back();
   }
 
   l.inc_prefix();
@@ -1125,8 +1126,9 @@ int tcorrect( Logfile& l, Config& c ) {
 
   // No slash at end of dirname.
   //
-  if ( (dirname != "") && (dirname.substr(dirname.length()-1, 1) == "/") ) {
-    dirname = dirname.substr(0, dirname.length()-1);
+  if ( (dirname != "")
+       && (dirname.back() == '/') ) {
+    dirname.pop_back();
   }
 
   l.inc_prefix();
@@ -2491,8 +2493,9 @@ int mcorrect( Logfile& l, Config& c ) {
 
   // No slash at end of dirname.
   //
-  if ( (dirname != "") && (dirname.substr(dirname.length()-1, 1) == "/") ) {
-    dirname = dirname.substr(0, dirname.length()-1);
+  if ( (dirname != "")
+       && (dirname.back() == '/') ) {
+    dirname.pop_back();
   }
 
   l.inc_prefix();
@@ -2824,8 +2827,6 @@ int mcorrect( Logfile& l, Config& c ) {
 		// Check match-depth, if too undeep, we are probably
 		// unsure.
 		//
-		// KvdS : possible BUG: md is never set to != 0, but tested
-		size_t md  = 0; //My_Experiment->matchDepth();
 		//bool   mal = 0; //My_Experiment->matchedAtLeaf();
 
 		if ( target == answer ) {
@@ -2932,6 +2933,8 @@ int mcorrect( Logfile& l, Config& c ) {
 		}
 		*/
 		// from L1084
+		// KvdS : possible BUG: md is never set to != 0, but tested
+		size_t md  = 0; //My_Experiment->matchDepth();
 		std::vector<distr_elem*> distr_vec;
 		if ( distr_count >= min_dsum ) {
 		  if ( md >= (size_t)min_md ) {
@@ -3062,8 +3065,9 @@ int cmcorrect( Logfile& l, Config& c ) {
 
   // No slash at end of dirname.
   //
-  if ( (dirname != "") && (dirname.substr(dirname.length()-1, 1) == "/") ) {
-    dirname = dirname.substr(0, dirname.length()-1);
+  if ( (dirname != "")
+       && (dirname.back() == '/') ) {
+    dirname.pop_back();
   }
 
   l.inc_prefix();
@@ -3372,10 +3376,6 @@ int cmcorrect( Logfile& l, Config& c ) {
 	std::string answer = tv->name_string();
 	//l.log( "Answer: '" + answer + "' / '" + target + "'" );
 
-	// Check match-depth, if too undeep, we are probably
-	// unsure.
-	//
-	size_t md  = 0; //My_Experiment->matchDepth();
 	//bool   mal = 0; //My_Experiment->matchedAtLeaf();
 
 	if ( target == answer ) {
@@ -3456,6 +3456,11 @@ int cmcorrect( Logfile& l, Config& c ) {
 
 	// Simplified for cmcorrect, with only md and confidence.
 	//
+	// Check match-depth, if too undeep, we are probably
+	// unsure.
+	//
+	size_t md  = 0; //My_Experiment->matchDepth();
+
 	std::vector<distr_elem*> distr_vec;
 	std::vector<distr_elem*>::const_iterator fi;
 	bool fail = true;
@@ -3644,8 +3649,9 @@ int sml( Logfile& l, Config& c ) {
   std::unordered_set<std::string> triggers;
   // No slash at end of dirname.
   //
-  if ( (dirname != "") && (dirname.substr(dirname.length()-1, 1) == "/") ) {
-    dirname = dirname.substr(0, dirname.length()-1);
+  if ( (dirname != "")
+       && (dirname.back() == '/') ) {
+    dirname.pop_back();
   }
 
   l.inc_prefix();

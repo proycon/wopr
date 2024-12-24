@@ -98,7 +98,7 @@ void Logfile::init() {
 void Logfile::append( const std::string& s) {
   char      timestring[32];
   timeval   tv;
-  struct tm *t;
+  const struct tm *t;
   std::ostringstream ostr;
 
   gettimeofday(&tv, 0);
@@ -124,7 +124,7 @@ void Logfile::append( const std::string& s) {
 void Logfile::log( const std::string& s ) {
   char      timestring[32];
   timeval   tv;
-  struct tm *t;
+  const struct tm *t;
 
   pthread_mutex_lock( &mtx );
 
@@ -149,7 +149,7 @@ void Logfile::log( const std::string& s ) {
 void Logfile::log( const std::string& s, const std::string& esc_code  ) {
   char      timestring[32];
   timeval   tv;
-  struct tm *t;
+  const struct tm *t;
 
   pthread_mutex_lock( &mtx );
 
@@ -184,7 +184,7 @@ void Logfile::log( const std::string& s, int sl ) {
 void Logfile::log_raw( const std::string& s ) {
   char      timestring[32];
   timeval   tv;
-  struct tm *t;
+  const struct tm *t;
 
   pthread_mutex_lock( &mtx );
 
@@ -208,7 +208,7 @@ void Logfile::log_raw( const std::string& s ) {
 void Logfile::log_begin( const std::string& s ) {
   char      timestring[32];
   timeval   tv;
-  struct tm *t;
+  const struct tm *t;
 
   gettimeofday( &tv, 0 );
   t = localtime( &tv.tv_sec );
@@ -257,7 +257,7 @@ void Logfile::inc_prefix() {
 
 void Logfile::dec_prefix() {
   if (prefix.length() > 0) {
-    prefix = prefix.substr(0, prefix.length()-1);
+    prefix.pop_back();
   }
 }
 
@@ -276,7 +276,7 @@ void Logfile::get_raw( timeval& tv ) {
 void Logfile::DBG( const std::string& s ) {
   char      timestring[32];
   timeval   tv;
-  struct tm *t;
+  const struct tm *t;
 
   pthread_mutex_lock( &mtx );
 
